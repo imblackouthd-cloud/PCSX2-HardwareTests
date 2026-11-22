@@ -1,0 +1,41 @@
+FROZEN PHYSICAL TEST CANDIDATE
+VUMULTEST.ELF SHA256:
+E705D41805F64FA78A459D2DD345FCA0D44C87963E81080FD31511B1D1BA53E1
+
+1. Later, copy ONLY VUMULTEST.ELF to root of an already-compatible USB drive.
+   Do not format media or modify the memory card.
+2. Use your existing working Fortuna sequence, unchanged, on SCPH-90K slim.
+3. Open the file manager/homebrew launcher you already use. Select the USB
+   device and launch VUMULTEST.ELF. Do not install/copy it to memory card.
+   No particular button sequence or device naming is assumed.
+4. Photograph the complete result screen, including both columns/checksum.
+5. Power off normally. Remove USB after power-off; delete test file on PC later.
+If your existing setup cannot launch USB ELFs, STOP. Do not reinstall anything.
+
+Expected display (XXXXXXXX are measured raw results, NOT preset expectations):
+VU MULTIPLY TEST v2 - RAW HEX
+CASE   VMUL      VMULx
+0      XXXXXXXX  XXXXXXXX
+1      XXXXXXXX  XXXXXXXX
+2      XXXXXXXX  XXXXXXXX
+3      XXXXXXXX  XXXXXXXX
+4      XXXXXXXX  XXXXXXXX
+5      XXXXXXXX  XXXXXXXX
+6      XXXXXXXX  XXXXXXXX
+PRIMARY FS=3F800001 FT=3F808000
+RESULT=XXXXXXXX VMULx=XXXXXXXX
+MODEL15=3F808001 MODEL16=3F808000
+DECISION VMUL:M15/M16/NEITHER VMULx:M15/M16/NEITHER
+ALL7 model match counts; HARNESS ERRORS:0; RAM:00123140 SIZE:3648;
+RESULT FNV32:XXXXXXXX; photograph/power-off message.
+
+Case Fs        Ft        Model15   Model16
+0    3F800000  40000000  40000000  40000000
+1    3F800000  43018000  43017FFF  43017FFF
+2    3F800001  3F808000  3F808001  3F808000
+3    3F800040  3F800020  3F800060  3F80005F
+4    3F800100  3F800008  3F800108  3F800107
+5    3F808000  3F800001  3F808001  3F808001
+6    43018000  3F800000  43018000  43018000
+These columns are predictions. Record actual output BEFORE interpretation.
+
