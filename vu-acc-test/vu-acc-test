@@ -1,0 +1,68 @@
+# PS2 VU ACC Precision Hardware Test
+
+This test measures PlayStation 2 Vector Unit accumulator (ACC) precision and range behavior on real hardware.
+
+It was created while investigating `VMULAx` semantics for PS2 recompilation work. The main question is whether the VU accumulator stores the same packed precision as a normal vector register, retains additional multiplier precision, or uses a wider/extended internal representation.
+
+The standalone ELF runs a set of precision, cancellation, range, and consumer-control sequences using `VMULAx` followed by ACC-consuming instructions such as VMADD/VMSUB. Final vector results are captured as raw hexadecimal values and compared against several precomputed ACC models.
+
+## Physical hardware
+
+- Retail SCPH-90K-series PlayStation 2 Slim
+- Standalone ELF launched through an existing Fortuna/USB setup
+- No firmware modification
+- No persistent installation
+- No files or memory-card data written by the payload
+
+## Physical results
+
+The test completed with:
+
+- 12 displayed test cases
+- Harness errors: `0`
+- 32/64-bit capture comparison enabled
+- RAM capture size: `3200` bytes
+- Physical checksum: `B12428ED`
+
+Notable physical results include:
+
+- Case 01: `00000000`
+- Case 02: `00000000`
+- Case 03: `00000000`
+- Case 04: `00000000`
+- Case 06: `00000000`
+- Case 07: `7FFFFFFF`
+- Case 08: `28800000`
+- Case 10: `00000000`
+- Case 11: `80000000`
+
+Case 7 is particularly interesting because the physical result `7FFFFFFF` does not exactly match any of the three originally displayed PACKED/WIDE/EXTENDED predictions, suggesting additional ACC-consumer or saturation behavior still needs to be modeled.
+
+## Important limitation
+
+These results do **not** by themselves prove ACC storage width.
+
+The observed final values depend on both:
+
+1. the precision/range retained in ACC, and
+2. how later VMADD/VMSUB instructions consume and pack ACC.
+
+The test therefore provides hardware evidence for narrowing the ACC model rather than simply declaring the accumulator "packed" or "wide."
+
+## Emulator use
+
+PCSX2 was used only to verify the test harness, instruction encodings, RAM capture, guards, checksum handling, and screen output.
+
+Emulator arithmetic results are **not** treated as the hardware oracle.
+
+## Purpose
+
+The results are intended to help document PS2 VU accumulator behavior for:
+
+- PS2 emulators
+- Static and dynamic recompilers
+- VU accuracy research
+- Reverse engineering
+- Hardware-behavior documentation
+
+The test source, frozen ELF, model predictions, physical results, and supporting evidence are preserved so the experiment can be independently reviewed or extended.
