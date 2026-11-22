@@ -1,0 +1,92 @@
+# PS2 VU Flag Hardware Test
+
+This branch contains a standalone PlayStation 2 hardware test for VU floating-point flag behavior, focused on negative-zero handling in multiply operations.
+
+The test was created while investigating PS2 VU arithmetic accuracy for recompilation/emulation work. Software references disagreed on whether a raw negative-zero result (`0x80000000`) should set the VU Sign flag, so the behavior was measured directly on physical PS2 hardware.
+
+## Hardware
+
+- Retail SCPH-90K-series PlayStation 2 Slim
+- Test launched through an existing Fortuna/USB homebrew setup
+- No firmware changes
+- No persistent installation
+- No memory-card writes performed by the test payload
+
+## What is captured
+
+For each test case the payload records:
+
+- Raw arithmetic result
+- MAC flags
+- STATUS before execution
+- STATUS after execution
+
+The test also includes control cases for:
+
+- Exact negative zero
+- Underflow-generated negative zero
+- Positive zero
+- Seeded I/D state
+- Component masking
+- vf0 behavior
+- Overflow
+- Ordinary finite arithmetic
+
+## Physical hardware results
+
+Key observed cases:
+
+Case 0 — positive zero times negative value
+
+- Result: `80000000`
+- MAC: `00FF`
+- STATUS: `0C01` to `0C03`
+
+Case 1 — negative zero times positive value
+
+- Result: `80000000`
+- MAC: `00FF`
+- STATUS: `0C01` to `0C03`
+
+Case 2 — negative underflow
+
+- Result: `80000000`
+- MAC: `0FFF`
+- STATUS: `0C01` to `0DC7`
+
+Case 3 — negative zero times negative value
+
+- Result: `00000000`
+- MAC: `000F`
+- STATUS: `0C01` to `0C41`
+
+Additional test status:
+
+- Harness errors: `0`
+- 32/64-bit capture comparison enabled
+- Raw RAM capture active
+- Result checksum: `17D87C01`
+
+## Important note about emulator results
+
+PCSX2 was used only to sanity-check the test harness, instruction execution, result capture, and display logic.
+
+Emulator arithmetic and flag results are not treated as the hardware oracle.
+
+The values above are from physical PS2 hardware.
+
+## Purpose
+
+This data is intended to help clarify PS2 VU floating-point flag semantics for:
+
+- Emulator accuracy
+- Static recompilation
+- Dynamic recompilation
+- Reverse engineering
+- Hardware behavior documentation
+
+The main question being investigated is whether raw negative-zero results set the VU Sign flag, and whether underflow-generated negative zero behaves differently from exact negative zero.
+
+## Reproducibility
+
+The standalone test payload, source, build instructions, and hardware result data should be kept together so the measurements can be reproduced or extended with additional VU cases later.
